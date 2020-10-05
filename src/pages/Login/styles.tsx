@@ -30,12 +30,23 @@ export const Page = styled.div`
     border: 2px solid #ccc;
     border-radius: 5px;
 
-    input {
-    font-size: 14px;
-    height: 40px;
-    padding-left: 5px;
-    border: 1px solid #DDD;
-    border-radius: 5px;
+    div {
+
+      display: flex;
+      flex-direction: row;
+      margin-top: 10px;
+      align-items: center;
+
+      input {
+      font-size: 16px;
+      height: 40px;
+      width: 100%;
+      outline: none;
+      padding: 10px;
+      padding-left: 5px;
+      border: 1px solid #DDD;
+      border-radius: 5px;
+      }
     }
 
     button {
