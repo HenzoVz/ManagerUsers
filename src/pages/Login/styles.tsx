@@ -6,10 +6,15 @@ export const Page = styled.div`
   flex: 1;
 
   h1 {
-    font-size: 45px;
+    font-size: 40px;
     text-align: center;
 
     color: #fff;
+
+    svg {
+      margin-right: auto;
+      margin-left: auto;
+    }
   }
 
   form {

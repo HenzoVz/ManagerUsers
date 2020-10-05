@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FiLogIn } from 'react-icons/fi'
 
 import { Page } from './styles';
 
@@ -8,7 +9,9 @@ const Login: React.FC = () => {
 
   return (
     <Page>
-      <h1>Log in</h1>
+      <h1>Log in
+        <FiLogIn size={40}/>
+      </h1>
       <form>
         <label>Email:</label>
         <br/>
