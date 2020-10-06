@@ -8,17 +8,14 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    background: linear-gradient(to right, #3f5efb, #340d5e);
+    /* background: linear-gradient(to right, #3f5efb, #340d5e); */
+    background: #ddd;
     -webkit-font-smoothing: antialiased;
   }
   body, input, button {
     font: 16px Roboto, sans-serif;
   }
-  #root {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 40px 20px;
-  }
+
   button {
     cursor: pointer;
   }
