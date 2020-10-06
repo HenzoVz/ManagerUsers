@@ -8,8 +8,7 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    /* background: linear-gradient(to right, #3f5efb, #340d5e); */
-    background: #ddd;
+    background: #eee;
     -webkit-font-smoothing: antialiased;
   }
   body, input, button {

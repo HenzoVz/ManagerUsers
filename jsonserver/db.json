@@ -1,3 +1,43 @@
 {
-  "usuarios": []
+  "usuarios": [
+    {
+      "id": "bb7d7327-5116-40dd-acba-8ab296523c43",
+      "name": "aaada",
+      "cpf": "dadas",
+      "email": "murilo@gmail.com",
+      "adress": {
+        "cep": "dasd",
+        "street": "asd",
+        "number": "dasd",
+        "district": "adsda",
+        "city": "adasd"
+      }
+    },
+    {
+      "id": "16e326cc-cbf3-43a7-b984-44f37b50dc43",
+      "name": "Murilo",
+      "cpf": "0404114606",
+      "email": "murilo@gmail.com",
+      "adress": {
+        "cep": "0206515151",
+        "street": "Feliz",
+        "number": "1212",
+        "district": "Felicidade",
+        "city": "Nárnia"
+      }
+    },
+    {
+      "id": "08e4ed2b-add8-4049-806a-010c6bf3ee2d",
+      "name": "Murilo",
+      "cpf": "0404114606",
+      "email": "murilo@gmail.com",
+      "adress": {
+        "cep": "1252763753",
+        "street": "3453543",
+        "number": "24533543",
+        "district": "3453453",
+        "city": "435354"
+      }
+    }
+  ]
 }

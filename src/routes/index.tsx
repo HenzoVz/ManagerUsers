@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import Login from '../pages/Login';
-import Dashboard from '../pages/dashboard';
+import Dashboard from '../pages/Dashboard';
 
 const Routes: React.FC = () => (
   <Switch>

@@ -4,6 +4,10 @@ import styled from 'styled-components';
 export const Page = styled.div`
 
   flex: 1;
+  background: #A83A83;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 20px;
 
   h1 {
     font-size: 40px;
