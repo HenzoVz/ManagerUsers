@@ -1,19 +1,14 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  flex: 1;
+  margin: 0 auto;
   display: flex;
-  width: 100%;
-  height: 100%;
   flex-direction: column;
-  padding: 40px 20px;
+  max-width: 680px;
+
 
   .wrapper-section {
-    border: 3px solid #4d4d4d;
-    padding: 20px 20px;
-    width: 100%;
-    max-width: 680px;
-
+    padding: 20px;
   }
 
   .title {
@@ -38,6 +33,7 @@ export const Container = styled.div`
     border-radius: 0.25rem;
     padding: 2px;
     margin: 3px;
+    height: calc(1.5em + 0.75rem + 2px);
 
   }
 
@@ -46,6 +42,8 @@ export const Container = styled.div`
   }
 
   .save {
+    display: flex;
+    margin: 0 auto;
     margin-top: 10px;
     height: 30px;
     width: 150px;
@@ -54,6 +52,7 @@ export const Container = styled.div`
     border: 2px solid #495057;
     border-radius: 5px;
     font-weight: bold;
+    color: #495057;
 
 
     &:hover {

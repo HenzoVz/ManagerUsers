@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { FaMapMarkedAlt, AiOutlineDatabase } from 'react-icons/all';
-
+import {useParams} from 'react-router-dom';
 import { uuid } from 'uuidv4';
 
 import Header from '../../components/Header';
@@ -13,38 +13,30 @@ import api from '../../services/api';
 import search from '../../services/searchCep'
 import { cpfMask, cepMask } from '../../utils/mask';
 
-
-interface User {
-  id: string;
-  name: string;
-  cpf: string
-  email: string;
-  adress: {
-    cep: string;
-    street: string;
-    number: string;
-    district: string;
-    city: string;
-  }
-}
-
 const Dashboard: React.FC = () => {
-  const [user, setUser] = useState<User>({} as User);
-  const [name, setName] =  useState('');
-  const [cpf, setCpf] =  useState('');
-  const [email, setEmail] =  useState('');
-  const [cep, setCep] =  useState('');
-  const [street, setStreet] =  useState('');
-  const [number, setNumber] =  useState('');
-  const [district, setDistrict] =  useState('');
-  const [city, setCity] =  useState('');
+
+  const params = useParams();
+
+  const [name, setName] =  useState<string>('');
+  const [cpf, setCpf] =  useState<string>('');
+  const [email, setEmail] =  useState<string>('');
+  const [cep, setCep] =  useState<string>('');
+  const [street, setStreet] =  useState<string>('');
+  const [number, setNumber] =  useState<string>('');
+  const [district, setDistrict] =  useState<string>('');
+  const [city, setCity] =  useState<string>('');
 
   const notify = (text: ToastContent) => toast(text);
 
+
+  // useEffect(() => {
+  //   if(params?.id){
+  //     // rotina passando
+  //   }
+  // }, [params?.id]);
+
   function handleAddUser(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-
     if (!name) {
       notify("Nome é obrigatório")
     } else if (!email){
@@ -62,32 +54,58 @@ const Dashboard: React.FC = () => {
     } else if (!city){
       notify("Cidade é obrigatório")
     } else {
-        setUser({
-          id: uuid(),
-          name: name,
-          cpf: cpfMask(cpf),
-          email: email,
-          adress: {
-            cep: cepMask(cep),
-            street: street,
-            number: number,
-            district: district,
-            city: city
+      const dataUser = {
+        id: uuid(),
+        name: name,
+        cpf: cpfMask(cpf),
+        email: email,
+        adress: {
+          cep: cepMask(cep),
+          street: street,
+          number: number,
+          district: district,
+          city: city
+        }
+      };
 
-          }
+      // if(params.id){
+      //   api.put(`usuarios/${params.id}`, dataUser)
+      //   .then(() => {
+      //     notify('Deu certo')
+      //     setName('');
+      //   })
+      //   .catch(() => {
+      //     notify('Houve um erro ao inserir')
+      //   });
+      // } else {
+        api.post('usuarios', dataUser)
+        .then(() => {
+          notify('Cadastro realizado')
+          setName('');
+          setEmail('');
+          setCpf('');
+          setCep('');
+          setStreet('');
+          setNumber('');
+          setDistrict('');
+          setCity('');
+        })
+        .catch(() => {
+          notify('Houve um erro ao inserir')
         });
+      // }
     }
-
   };
 
   useEffect(() => {
     async function getData(): Promise<void> {
-      const response = await search.get(`${cep}/json`)
-      const {logradouro, bairro, localidade} = response.data
-
-      setStreet(logradouro);
-      setDistrict(bairro);
-      setCity(localidade);
+      if(cep.length === 8) {
+        const response = await search.get(`${cep}/json`)
+        const {logradouro, bairro, localidade} = response.data
+        setStreet(logradouro);
+        setDistrict(bairro);
+        setCity(localidade);
+      };
     };
     getData()
   }, [cep])

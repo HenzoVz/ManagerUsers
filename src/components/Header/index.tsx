@@ -14,10 +14,10 @@ const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => (
         <h1>Sistema de Cadastro</h1>
         <nav>
           <>
-            <Link className="link" to="/">
+            <Link className="link" to="/dashboard">
               Cadastrar
             </Link>
-            <Link className="link" to="/">
+            <Link className="link" to="/listagem">
               Listagem
             </Link>
             <Link className="link" to="/">

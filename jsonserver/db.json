@@ -1,16 +1,42 @@
 {
   "usuarios": [
     {
-      "id": "4a27c11f-f134-455b-9eab-0a617d218be2",
+      "id": "74e3eb3c-bd2d-4703-8c8f-53881f62d344",
       "name": "murilo",
-      "cpf": "454.565.665-45",
+      "cpf": "129.198.198-95",
       "email": "murilo@gmail.com",
       "adress": {
-        "cep": "46464-654",
-        "street": "Azul",
+        "cep": "60175-210",
+        "street": "Rua Oito de Setembro",
+        "number": "1444",
+        "district": "Varjota",
+        "city": "Fortaleza"
+      }
+    },
+    {
+      "id": "aff9fb2f-0c2e-4690-a279-f918d459d7e4",
+      "name": "murilo",
+      "cpf": "129.198.198-95",
+      "email": "murilo@gmail.com",
+      "adress": {
+        "cep": "60175-210",
+        "street": "Rua Oito de Setembro",
+        "number": "1444",
+        "district": "Varjota",
+        "city": "Fortaleza"
+      }
+    },
+    {
+      "id": "85b529bb-e5d8-4bdb-bc5f-2e85424794bc",
+      "name": "henzo",
+      "cpf": "151.951.948-49",
+      "email": "hezno@gmail.com",
+      "adress": {
+        "cep": "60175-210",
+        "street": "Rua Oito de Setembro",
         "number": "1515",
-        "district": "Feliz",
-        "city": "Mar"
+        "district": "Varjota",
+        "city": "Fortaleza"
       }
     }
   ]
