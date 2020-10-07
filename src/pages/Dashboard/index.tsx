@@ -1,5 +1,4 @@
 import React, { useState, useEffect, FormEvent } from 'react';
-
 import { FaMapMarkedAlt, AiOutlineDatabase } from 'react-icons/all';
 
 import { uuid } from 'uuidv4';
@@ -7,10 +6,11 @@ import { uuid } from 'uuidv4';
 import Header from '../../components/Header';
 import { Container } from './styles';
 
-import api from '../../services/api';
-
 import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import api from '../../services/api';
+import { cpfMask, cepMask } from '../../utils/mask';
 
 
 interface User {
@@ -28,7 +28,7 @@ interface User {
 }
 
 const Dashboard: React.FC = () => {
-  const [user, setUser] = useState<User>({} as User);
+  const [user, setUser] = useState<User | null>({} as User);
   const [name, setName] =  useState('');
   const [cpf, setCpf] =  useState('');
   const [email, setEmail] =  useState('');
@@ -38,10 +38,11 @@ const Dashboard: React.FC = () => {
   const [district, setDistrict] =  useState('');
   const [city, setCity] =  useState('');
 
-  const notify = (text: ToastContent) => toast(text);
 
   function handleAddUser(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const notify = (text: ToastContent) => toast(text);
 
     if (!name) {
       notify("Nome é obrigatório")
@@ -60,36 +61,37 @@ const Dashboard: React.FC = () => {
     } else if (!city){
       notify("Cidade é obrigatório")
     } else {
-      setUser({
-        id: uuid(),
-        name: name,
-        cpf: cpf,
-        email: email,
-        adress: {
-          cep: cep,
-          street: street,
-          number: number,
-          district: district,
-          city: city
 
-        }
+      api.post('usuarios', user).then(response => {
+        setUser({
+          id: uuid(),
+          name: name,
+          cpf: cpfMask(cpf),
+          email: email,
+          adress: {
+            cep: cepMask(cep),
+            street: street,
+            number: number,
+            district: district,
+            city: city
+
+          }
+        });
+        console.log(response.data);
+      }).catch(error => {
+        console.log(error);
       });
-
-      try {
-        api.post('usuarios', user)
-      } catch (err) {
-        notify("Erro ao salvar dados");
-      }
     }
-  };
 
+  };
 
   return (
     <>
       <Header/>
       <ToastContainer/>
       <Container>
-          <form onSubmit={handleAddUser}>
+          <form onSubmit={handleAddUser} action="/usuarios">
+          <section className="wrapper-section">
            <AiOutlineDatabase size={25} /> <span  className="title">Dados pessoais</span>
             <div className="wrapper-input">
               <label className="text">Nome</label>
@@ -117,59 +119,63 @@ const Dashboard: React.FC = () => {
                   autoComplete="off"
                   value = {cpf}
                   autoFocus
+                  maxLength="14"
                   onChange={(event) => setCpf(event.target.value)}
                 />
             </div>
-            <br/>
-          <FaMapMarkedAlt size={25}/> <span className="title">Dados residenciais</span>
-            <div className="wrapper-input">
-              <label className="text">CEP</label>
-              <input
-                className="input"
-                type="text"
-                autoComplete="off"
-                value = {cep}
-                autoFocus
-                onChange={(event) => setCep(event.target.value)}
+          </section>
+          <section className="wrapper-section">
+            <FaMapMarkedAlt size={25}/> <span className="title">Dados residenciais</span>
+              <div className="wrapper-input">
+                <label className="text">CEP</label>
+                <input
+                  className="input"
+                  type="text"
+                  autoComplete="off"
+                  value = {cep}
+                  autoFocus
+                  maxLength="8"
+                  onChange={(event) => setCep(event.target.value)}
+                  />
+                <label className="text">Rua</label>
+                <input
+                  className="input"
+                  type="text"
+                  autoComplete="off"
+                  value = {street}
+                  autoFocus
+                  onChange={(event) => setStreet(event.target.value)}
                 />
-              <label className="text">Rua</label>
-              <input
-                className="input"
-                type="text"
-                autoComplete="off"
-                value = {street}
-                autoFocus
-                onChange={(event) => setStreet(event.target.value)}
-              />
-              <label className="text">Número</label>
-              <input
-                className="input"
-                type="text"
-                autoComplete="off"
-                value = {number}
-                autoFocus
-                onChange={(event) => setNumber(event.target.value)}
-              />
-              <label className="text">Bairro</label>
-              <input
-                className="input"
-                type="text"
-                autoComplete="off"
-                value ={district}
-                autoFocus
-                onChange={(event) => setDistrict(event.target.value)}
-              />
-              <label className="text">Cidade</label>
-              <input
-                className="input"
-                type="text"
-                autoComplete="off"
-                value = {city}
-                autoFocus
-                onChange={(event) => setCity(event.target.value)}
-              />
-            </div>
+                <label className="text">Número</label>
+                <input
+                  className="input"
+                  type="text"
+                  autoComplete="off"
+                  value = {number}
+                  autoFocus
+                  onChange={(event) => setNumber(event.target.value)}
+                />
+                <label className="text">Bairro</label>
+                <input
+                  className="input"
+                  type="text"
+                  autoComplete="off"
+                  value ={district}
+                  autoFocus
+                  onChange={(event) => setDistrict(event.target.value)}
+                />
+                <label className="text">Cidade</label>
+                <input
+                  className="input"
+                  type="text"
+                  autoComplete="off"
+                  value = {city}
+                  autoFocus
+                  onChange={(event) => setCity(event.target.value)}
+                />
+              </div>
             <button className="save" type="submit">Salvar</button>
+          </section>
           </form>
       </Container>
     </>
