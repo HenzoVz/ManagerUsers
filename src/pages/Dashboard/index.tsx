@@ -10,6 +10,7 @@ import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import api from '../../services/api';
+import search from '../../services/searchCep'
 import { cpfMask, cepMask } from '../../utils/mask';
 
 
@@ -28,7 +29,7 @@ interface User {
 }
 
 const Dashboard: React.FC = () => {
-  const [user, setUser] = useState<User | null>({} as User);
+  const [user, setUser] = useState<User>({} as User);
   const [name, setName] =  useState('');
   const [cpf, setCpf] =  useState('');
   const [email, setEmail] =  useState('');
@@ -38,11 +39,11 @@ const Dashboard: React.FC = () => {
   const [district, setDistrict] =  useState('');
   const [city, setCity] =  useState('');
 
+  const notify = (text: ToastContent) => toast(text);
 
   function handleAddUser(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const notify = (text: ToastContent) => toast(text);
 
     if (!name) {
       notify("Nome é obrigatório")
@@ -61,8 +62,6 @@ const Dashboard: React.FC = () => {
     } else if (!city){
       notify("Cidade é obrigatório")
     } else {
-
-      api.post('usuarios', user).then(response => {
         setUser({
           id: uuid(),
           name: name,
@@ -77,20 +76,28 @@ const Dashboard: React.FC = () => {
 
           }
         });
-        console.log(response.data);
-      }).catch(error => {
-        console.log(error);
-      });
     }
 
   };
+
+  useEffect(() => {
+    async function getData(): Promise<void> {
+      const response = await search.get(`${cep}/json`)
+      const {logradouro, bairro, localidade} = response.data
+
+      setStreet(logradouro);
+      setDistrict(bairro);
+      setCity(localidade);
+    };
+    getData()
+  }, [cep])
 
   return (
     <>
       <Header/>
       <ToastContainer/>
       <Container>
-          <form onSubmit={handleAddUser} action="/usuarios">
+          <form onSubmit={handleAddUser}>
           <section className="wrapper-section">
            <AiOutlineDatabase size={25} /> <span  className="title">Dados pessoais</span>
             <div className="wrapper-input">
@@ -174,7 +181,7 @@ const Dashboard: React.FC = () => {
                   onChange={(event) => setCity(event.target.value)}
                 />
               </div>
-            <button className="save" type="submit">Salvar</button>
+            <button className="save" type="submit" >Salvar</button>
           </section>
           </form>
       </Container>
