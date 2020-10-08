@@ -22,7 +22,8 @@
     "semantic-ui-react": "^2.0.0",
     "styled-components": "^5.2.0",
     "typescript": "~3.7.2",
-    "uuidv4": "^6.2.3"
+    "uuidv4": "^6.2.3",
+    "validar-cpf": "^2.1.2"
   },
   "scripts": {
     "start": "react-scripts start",

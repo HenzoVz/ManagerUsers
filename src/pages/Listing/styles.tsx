@@ -36,4 +36,9 @@ export const Table  = styled.table`
     }
   }
 
+  svg {
+    width: 100px;
+    height: 100px;
+  }
+
 `;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, { useState, useEffect, useRef, FormEvent } from 'react';
 import { FaMapMarkedAlt, AiOutlineDatabase } from 'react-icons/all';
 import {useParams} from 'react-router-dom';
 import { uuid } from 'uuidv4';
@@ -13,9 +13,11 @@ import api from '../../services/api';
 import search from '../../services/searchCep'
 import { cpfMask, cepMask } from '../../utils/mask';
 
-const Dashboard: React.FC = () => {
+interface Params {
+  id: string;
+}
 
-  const params = useParams();
+const Dashboard: React.FC = () => {
 
   const [name, setName] =  useState<string>('');
   const [cpf, setCpf] =  useState<string>('');
@@ -26,14 +28,21 @@ const Dashboard: React.FC = () => {
   const [district, setDistrict] =  useState<string>('');
   const [city, setCity] =  useState<string>('');
 
+  const cpfValidation = require('validar-cpf');
+
   const notify = (text: ToastContent) => toast(text);
 
+  const params = useParams<Params>();
 
-  // useEffect(() => {
-  //   if(params?.id){
-  //     // rotina passando
-  //   }
-  // }, [params?.id]);
+  // const refInput = useRef<HTMLInputElement>(null);
+
+  // function handleFocus() {
+  //   const ref = refInput.current?.focus
+  // };
+
+  function isNumber(value: string) {
+    return /^[0-9\b]+$/.test(value);
+  }
 
   function handleAddUser(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -43,10 +52,14 @@ const Dashboard: React.FC = () => {
       notify("Email é obrigatório")
     } else if (!cpf){
       notify("CPF é obrigatório")
+    } else if (isNumber(cep) !== true) {
+      notify("CEP inválido")
     } else if (!cep){
       notify("CEP é obrigatório")
     } else if (!street){
       notify("Rua é obrigatório")
+    } else if (isNumber(number) !== true) {
+      notify("Número inválido")
     } else if (!number){
       notify("Número é obrigatório")
     } else if (!district){
@@ -68,16 +81,16 @@ const Dashboard: React.FC = () => {
         }
       };
 
-      // if(params.id){
-      //   api.put(`usuarios/${params.id}`, dataUser)
-      //   .then(() => {
-      //     notify('Deu certo')
-      //     setName('');
-      //   })
-      //   .catch(() => {
-      //     notify('Houve um erro ao inserir')
-      //   });
-      // } else {
+      if (params.id) {
+        api.put(`usuarios/${params.id}`, dataUser)
+        .then(() => {
+          notify("Edição realizada");
+        })
+        .catch(() => {
+          notify("Houve um erro ao inserir")
+        })
+      } else {
+
         api.post('usuarios', dataUser)
         .then(() => {
           notify('Cadastro realizado')
@@ -93,7 +106,7 @@ const Dashboard: React.FC = () => {
         .catch(() => {
           notify('Houve um erro ao inserir')
         });
-      // }
+      }
     }
   };
 
@@ -111,6 +124,17 @@ const Dashboard: React.FC = () => {
         }
       };
   }, [cep])
+
+  useEffect(() => {
+    if(cpf.length === 11) {
+      const validation = cpfValidation(cpf)
+      if (validation === true) {
+        notify("CPF válido");
+      } else {
+        notify("CPF inválido");
+      }
+    }
+  }, [cpf])
 
   return (
     <>
@@ -163,6 +187,7 @@ const Dashboard: React.FC = () => {
                   autoFocus
                   maxLength="8"
                   onChange={(event) => setCep(event.target.value)}
+                  // ref={refInput}
                   />
                 <label className="text">Rua</label>
                 <input
@@ -180,7 +205,9 @@ const Dashboard: React.FC = () => {
                   autoComplete="off"
                   value = {number}
                   autoFocus
+                  // onClick={handleFocus}
                   onChange={(event) => setNumber(event.target.value)}
+
                 />
                 <label className="text">Bairro</label>
                 <input
