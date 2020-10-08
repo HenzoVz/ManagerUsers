@@ -98,16 +98,18 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    async function getData(): Promise<void> {
       if(cep.length === 8) {
-        const response = await search.get(`${cep}/json`)
-        const {logradouro, bairro, localidade} = response.data
-        setStreet(logradouro);
-        setDistrict(bairro);
-        setCity(localidade);
+        try {
+          search.get(`${cep}/json`).then(response => {
+          const {logradouro, bairro, localidade} = response.data
+          setStreet(logradouro);
+          setDistrict(bairro);
+          setCity(localidade);
+          });
+        } catch(err) {
+          notify("Erro ao busca CEP");
+        }
       };
-    };
-    getData()
   }, [cep])
 
   return (

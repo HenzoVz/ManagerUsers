@@ -38,6 +38,19 @@
         "district": "Varjota",
         "city": "Fortaleza"
       }
+    },
+    {
+      "id": "603fcde3-0ca8-408d-bbbc-9be5257926f7",
+      "name": "cris",
+      "cpf": "541.984.894-88",
+      "email": "cris@gmail.com",
+      "adress": {
+        "cep": "01001-000",
+        "street": "Praça da Sé",
+        "number": "1212",
+        "district": "Sé",
+        "city": "São Paulo"
+      }
     }
   ]
 }

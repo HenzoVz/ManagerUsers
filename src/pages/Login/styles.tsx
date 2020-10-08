@@ -3,11 +3,9 @@ import styled from 'styled-components';
 
 export const Page = styled.div`
 
-  flex: 1;
   background: #A83A83;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  margin:0 auto;
+  width: 680px;
 
   h1 {
     font-size: 40px;
@@ -23,16 +21,15 @@ export const Page = styled.div`
 
   form {
 
-    display: flex;
     flex: 1;
+    display: flex;
     flex-direction: column;
-
-    max-width: 690px;
-    margin: 30px auto 0;
+    line-height: 1.5;
     padding: 30px;
     background: #fff;
-    border: 2px solid #ccc;
-    border-radius: 5px;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
 
     div {
 
@@ -48,22 +45,23 @@ export const Page = styled.div`
       outline: none;
       padding: 10px;
       padding-left: 5px;
-      border: 1px solid #DDD;
-      border-radius: 5px;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
       }
     }
 
     button {
       padding: 10px 20px;
       margin-bottom: 10px;
-      border-radius: 5px;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
       background: #000;
       color: #FFF;
       font-size: 18px;
       font-weight: bold;
 
       &:hover {
-        background: orangered;
+        background: #A82A82;
       }
     }
   }

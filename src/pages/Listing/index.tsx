@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import Header from '../../components/Header';
+import LoaderComponent from '../../components/Loader';
+
 import { Table } from './styles';
 
 import { BiEditAlt, BsTrash } from 'react-icons/all';
@@ -24,17 +26,23 @@ interface Data {
 const Listing: React.FC = () => {
 
   const [data, setData] = useState<Data[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true)
     api.get('usuarios').then(response => {
       const newData = response.data;
       setData(newData);
+      setLoading(false);
     });
   }, []);
 
   return (
     <>
       <Header/>
+      { loading ? (
+        <LoaderComponent />
+      ) : (
       <Table>
         <thead>
           <tr>
@@ -64,6 +72,7 @@ const Listing: React.FC = () => {
           ))}
         </tbody>
       </Table>
+      )}
     </>
   );
 };
