@@ -66,15 +66,16 @@ export const Page = styled.div`
       }
     }
 
-    a {
+    h3 {
       text-align: center;
-      font-weight: bold;
+      font-size: 18px;
       color: #000;
 
       &:hover {
         color: #A82A82;
       }
     }
+
     hr {
       margin: 0 auto;
       width: 50%;

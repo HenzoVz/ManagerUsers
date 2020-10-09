@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 
-interface ContainerProps {
-  size?: 'small' | 'large';
-}
-
-export const Container = styled.div<ContainerProps>`
+export const Container = styled.div`
   flex: 1;
   display: flex;
   background: #A83A83;

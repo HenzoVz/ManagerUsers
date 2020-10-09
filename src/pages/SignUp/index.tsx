@@ -1,14 +1,15 @@
 import React, { useState, FormEvent } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useHistory } from 'react-router-dom';
 import { BiUser, FiUser, RiLockPasswordLine } from 'react-icons/all'
-
-import { uuid } from 'uuidv4';
-import { Page } from './styles';
-
 import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import { uuid } from 'uuidv4';
 import api from '../../services/api';
+
+import { Page } from './styles';
+
+
 
 const SingUp: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -16,6 +17,8 @@ const SingUp: React.FC = () => {
 
 
   const notify = (text: ToastContent) => toast(text);
+
+  const history = useHistory();
 
   function handleCreateUser(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,11 +38,15 @@ const SingUp: React.FC = () => {
       }
 
       api.post('signup', dataRegister)
-      .then((response) => {
-        const token = response.data
-        console.log(token)
+      .then(() => {
         notify("Cadastro Realizado")
       })
+      .catch(() => {
+        notify("Erro ao cadastrar");
+      })
+      .finally(() => {
+        history.push('/');
+      });
     }
   };
 
@@ -77,7 +84,7 @@ const SingUp: React.FC = () => {
           <button type="submit">Cadastrar</button>
           <br/>
         <Link to="/">
-          <a>Voltar login</a>
+          <h3>Voltar login</h3>
         </Link>
         <hr/>
       </form>

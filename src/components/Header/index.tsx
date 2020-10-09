@@ -4,14 +4,22 @@ import { Link } from 'react-router-dom';
 
 import { Container } from './styles';
 
-interface HeaderProps {
-  size?: 'small' | 'large';
-}
+import { useAuth } from '../../hooks/AuthContext';
 
-const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => (
-    <Container size={size}>
+
+const Header: React.FC = () => {
+
+  const { signOut } = useAuth();
+
+  function handleSignOut() {
+    signOut();
+  };
+
+  return (
+
+    <Container>
       <header>
-        <h1>Sistema de Cadastro</h1>
+        <h1>Manager Users</h1>
         <nav>
           <>
             <Link className="link" to="/dashboard">
@@ -20,13 +28,15 @@ const Header: React.FC<HeaderProps> = ({ size = 'large' }: HeaderProps) => (
             <Link className="link" to="/listagem">
               Listagem
             </Link>
-            <Link className="link" to="/">
+            <Link className="link" to="/" onClick={handleSignOut}>
               Sair
             </Link>
           </>
         </nav>
       </header>
     </Container>
-);
+  );
+};
+
 export default Header;
 
