@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
       };
 
       if (params.id) {
-        api.put(`usuarios/${params.id}`, dataUser)
+        api.put(`cadastros/${params.id}`, dataUser)
         .then(() => {
           notify("Edição realizada");
         })
@@ -91,7 +91,7 @@ const Dashboard: React.FC = () => {
         })
       } else {
 
-        api.post('usuarios', dataUser)
+        api.post('cadastros', dataUser)
         .then(() => {
           notify('Cadastro realizado')
           setName('');

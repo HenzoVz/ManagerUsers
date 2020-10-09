@@ -8,7 +8,7 @@ import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import notData  from '../../assets/nodata-found.png';
 
-import { Table } from './styles';
+import { Table, Image } from './styles';
 
 import { BiEditAlt, BsTrash } from 'react-icons/all';
 
@@ -37,7 +37,7 @@ const Listing: React.FC = () => {
 
   useEffect(() => {
     setLoading(true)
-    api.get('usuarios').then(response => {
+    api.get('cadastros').then(response => {
       const newData = response.data;
       setData(newData);
       setLoading(false);
@@ -45,7 +45,7 @@ const Listing: React.FC = () => {
   }, []);
 
   function deleteData(id: string) {
-    api.delete(`usuarios/${id}`)
+    api.delete(`cadastros/${id}`)
     .then(() => {
       let newData = [...data]
       newData = newData.filter((item) => item.id !== id);
@@ -61,43 +61,45 @@ const Listing: React.FC = () => {
       { loading ? (
         <LoaderComponent />
       ) : (
-      <Table>
-        { data.length === 0 ? (
-          <img src={notData} alt="Sem dados"/>
-        ) : (
         <>
-        <thead>
-        <tr>
-          <th>Nome</th>
-          <th>CPF</th>
-          <th>Email</th>
-          <th>Cidade</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
+        { data.length === 0 ? (
+          <Image>
+            <img className="not-data" src={notData} alt="Sem dados"/>
+          </Image>
+        ) : (
+      <Table>
+          <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Email</th>
+            <th>Cidade</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
         <tbody>
-          {data.map(user => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.cpf}</td>
-              <td>{user.email}</td>
-              <td>{user.adress.city}</td>
-              <td>
-                <Link key={user.id} to={`usuario/${user.id}`}>
-                  <button className="button-edit" onClick={() => console.log(user.id)}>
-                    <BiEditAlt size={20} />
+            {data.map(user => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.cpf}</td>
+                <td>{user.email}</td>
+                <td>{user.adress.city}</td>
+                <td>
+                  <Link key={user.id} to={`usuario/${user.id}`}>
+                    <button className="button-edit" onClick={() => console.log(user.id)}>
+                      <BiEditAlt size={20} />
+                    </button>
+                  </Link>
+                  <button className="button-delete" onClick={() => deleteData(user.id)}>
+                    <BsTrash size={20} />
                   </button>
-                </Link>
-                <button className="button-delete" onClick={() => deleteData(user.id)}>
-                  <BsTrash size={20} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-          </>
+                </td>
+              </tr>
+            ))}
+         </tbody>
+        </Table>
         )}
-      </Table>
+      </>
       )}
     </>
   );

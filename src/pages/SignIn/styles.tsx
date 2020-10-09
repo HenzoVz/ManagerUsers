@@ -4,7 +4,8 @@ import styled from 'styled-components';
 export const Page = styled.div`
 
   background: #A83A83;
-  margin:0 auto;
+  margin: 20px auto;
+  padding: 50px;
   width: 680px;
 
   h1 {
@@ -63,6 +64,24 @@ export const Page = styled.div`
       &:hover {
         background: #A82A82;
       }
+    }
+
+    a {
+      text-align: center;
+      font-weight: bold;
+      color: #000;
+
+      &:hover {
+        color: #A82A82;
+      }
+    }
+    hr {
+      margin: 0 auto;
+      width: 50%;
+      height: 2px;
+      height: 0.5px;
+      border: 1px solid #ccc;
+      background: #ccc;
     }
   }
 `;

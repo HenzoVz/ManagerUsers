@@ -1,3 +1,62 @@
 {
-  "usuarios": []
+  "signup": [
+    {
+      "email": "murilohezo@gmail.com",
+      "password": "$2a$10$gYD2VYFbiJt4OxVO7MGkSu7JA1PUzusrKd74oNcZfldTS0s4XdcdC",
+      "id": "7f5796c4-c587-4a5d-8241-a41d372b29f4"
+    },
+    {
+      "email": "murilo2@gmail.com",
+      "password": "$2a$10$z8PEGLD4xuM9mXKS/dYHjO1BBCQabSy4ybc69adh1IL0/9cdcIPmm",
+      "id": "gVleWzi"
+    },
+    {
+      "email": "murilo3@gmail.com",
+      "password": "$2a$10$X727I8tsiIW3llGB7UqV5eV7VaTwslXBE8A.3LCFPrXRJfUvxzaaC",
+      "id": "Pbl3Gnc"
+    },
+    {
+      "email": "mateus@gmail.com",
+      "password": "$2a$10$nSaG0SartFdDIN6ulqevQe9Bs7y3bF06I8U2h4v8lQNYjq9lnHpfW",
+      "id": "01f09cb6-6743-4f63-b414-308415cdb3e3"
+    },
+    {
+      "email": "murilo@gmail.com",
+      "password": "$2a$10$AhBGGlW5h5xTg3SdcHxl0.7d7tXtGJCx1iZ5vxCpCGzNR7Sw1.3HS",
+      "id": "9c4a6e09-6f3f-40db-8989-fde651145f34"
+    },
+    {
+      "email": "teste@gmail.com",
+      "password": "$2a$10$HzSRuAwvHgSxIIBCgKuofuboAl/dlitjfnAlBTHBUB0UKrscfiJ8y",
+      "id": "46425c68-9f83-41d6-9b85-7ad131889985"
+    }
+  ],
+  "cadastros": [
+    {
+      "id": "0ebe2c09-1143-4e27-bcfe-bddad222a3a4",
+      "name": "carlos jose almeida",
+      "cpf": "534.694.400-18",
+      "email": "carlos@gmail.com",
+      "adress": {
+        "cep": "01001-000",
+        "street": "Praça da Sé",
+        "number": "1515",
+        "district": "Sé",
+        "city": "São Paulo"
+      }
+    },
+    {
+      "id": "0dd82f60-2309-4e45-9b42-edfe4ed5c981",
+      "name": "julia",
+      "cpf": "534.694.400-18",
+      "email": "julia@gmail.com",
+      "adress": {
+        "cep": "01001-000",
+        "street": "Praça da Sé",
+        "number": "1212",
+        "district": "Sé",
+        "city": "São Paulo"
+      }
+    }
+  ]
 }

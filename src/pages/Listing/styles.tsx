@@ -36,9 +36,14 @@ export const Table  = styled.table`
     }
   }
 
-  svg {
-    width: 100px;
-    height: 100px;
-  }
+`;
 
+export const Image = styled.div`
+  margin: 0;
+
+  img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  }
 `;
