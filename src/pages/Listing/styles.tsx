@@ -21,7 +21,7 @@ export const Container = styled.div`
   }
 
   button {
-    padding: 2px;
+        padding: 2px;
     margin: 3px;
     margin-left: 15px;
     width: 150px;
@@ -32,10 +32,6 @@ export const Container = styled.div`
     font-weight: bold;
     color: #495057;
     height: calc(1.5em + 0.75rem + 2px);
-
-    &:hover {
-      background: #ccc;
-    }
   }
 
 `;

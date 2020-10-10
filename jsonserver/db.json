@@ -97,6 +97,19 @@
         "district": "Sé",
         "city": "São Paulo"
       }
+    },
+    {
+      "id": "c2cd9c61-697e-4982-ab21-4d903221d542",
+      "name": "roger",
+      "cpf": "505.951.330-02",
+      "email": "roger@gmail.com",
+      "adress": {
+        "cep": "01001--000",
+        "street": "Praça da Sé",
+        "number": "1515",
+        "district": "Sé",
+        "city": "São Paulo"
+      }
     }
   ]
 }

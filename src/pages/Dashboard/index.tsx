@@ -58,8 +58,6 @@ const Dashboard: React.FC = () => {
       notify("Email é obrigatório")
     } else if (!cpf){
       notify("CPF é obrigatório")
-    } else if (isNumber(cep) !== true) {
-      notify("CEP inválido")
     } else if (!cep){
       notify("CEP é obrigatório")
     } else if (!street){
@@ -139,8 +137,9 @@ const Dashboard: React.FC = () => {
       if (cpf.length === 11) {
         if(validation === true) {
             notify("CPF válido");
+          } else {
+            notify("CPF inválido");
           }
-          notify("CPF inválido");
         }
       }
       verifyCPF();
