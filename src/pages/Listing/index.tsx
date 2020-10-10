@@ -12,7 +12,7 @@ import { Table, Container, Image } from './styles';
 
 import { BiEditAlt, BsTrash } from 'react-icons/all';
 
-import api from '../../services/api';
+import { api } from '../../services/apis';
 
 interface Data {
   id: string;

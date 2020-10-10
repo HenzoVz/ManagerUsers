@@ -9,8 +9,7 @@ import { Container } from './styles';
 import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import api from '../../services/api';
-import search from '../../services/searchCep'
+import { api, viaCep } from '../../services/apis';
 import { cpfMask, cepMask } from '../../utils/mask';
 
 interface Params {
@@ -118,7 +117,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
       if(cep.length === 8) {
         try {
-          search.get(`${cep}/json`).then(response => {
+          viaCep.get(`${cep}/json`).then(response => {
           const {cep, logradouro, bairro, localidade} = response.data
           setCep(cepMask(cep));
           setStreet(logradouro);

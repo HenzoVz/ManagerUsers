@@ -5,7 +5,7 @@ import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { uuid } from 'uuidv4';
-import api from '../../services/api';
+import { api } from '../../services/apis';
 
 import { Page } from './styles';
 
