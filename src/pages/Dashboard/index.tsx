@@ -28,20 +28,26 @@ const Dashboard: React.FC = () => {
   const [district, setDistrict] =  useState<string>('');
   const [city, setCity] =  useState<string>('');
 
-  const cpfValidation = require('validar-cpf');
 
   const notify = (text: ToastContent) => toast(text);
 
   const params = useParams<Params>();
 
-  // const refInput = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // function handleFocus() {
-  //   const ref = refInput.current?.focus
-  // };
+
+  const cpfValidation = require('validar-cpf');
+  const validation = cpfValidation(cpf)
 
   function isNumber(value: string) {
     return /^[0-9\b]+$/.test(value);
+  }
+
+  function cepToNumberRef() {
+    if (cep.length === 8) {
+      return inputRef.current?.focus()
+    }
+    return;
   }
 
   function handleAddUser(event: FormEvent<HTMLFormElement>) {
@@ -67,13 +73,14 @@ const Dashboard: React.FC = () => {
     } else if (!city){
       notify("Cidade é obrigatório")
     } else {
+
       const dataUser = {
         id: uuid(),
         name: name,
         cpf: cpfMask(cpf),
         email: email,
         adress: {
-          cep: cepMask(cep),
+          cep: cep,
           street: street,
           number: number,
           district: district,
@@ -114,7 +121,8 @@ const Dashboard: React.FC = () => {
       if(cep.length === 8) {
         try {
           search.get(`${cep}/json`).then(response => {
-          const {logradouro, bairro, localidade} = response.data
+          const {cep, logradouro, bairro, localidade} = response.data
+          setCep(cepMask(cep));
           setStreet(logradouro);
           setDistrict(bairro);
           setCity(localidade);
@@ -122,19 +130,21 @@ const Dashboard: React.FC = () => {
         } catch(err) {
           notify("Erro ao busca CEP");
         }
+        cepToNumberRef();
       };
   }, [cep])
 
   useEffect(() => {
-    if(cpf.length === 11) {
-      const validation = cpfValidation(cpf)
-      if (validation === true) {
-        notify("CPF válido");
-      } else {
-        notify("CPF inválido");
+    function verifyCPF() {
+      if (cpf.length === 11) {
+        if(validation === true) {
+            notify("CPF válido");
+          }
+          notify("CPF inválido");
+        }
       }
-    }
-  }, [cpf])
+      verifyCPF();
+  }, [cpf, validation]);
 
   return (
     <>
@@ -160,7 +170,6 @@ const Dashboard: React.FC = () => {
                 type="email"
                 autoComplete="off"
                 value = {email}
-                autoFocus
                 onChange={(event) => setEmail(event.target.value)}
               />
               <label className="text">CPF</label>
@@ -169,7 +178,6 @@ const Dashboard: React.FC = () => {
                   type="text"
                   autoComplete="off"
                   value = {cpf}
-                  autoFocus
                   maxLength="14"
                   onChange={(event) => setCpf(event.target.value)}
                 />
@@ -184,10 +192,9 @@ const Dashboard: React.FC = () => {
                   type="text"
                   autoComplete="off"
                   value = {cep}
-                  autoFocus
                   maxLength="8"
                   onChange={(event) => setCep(event.target.value)}
-                  // ref={refInput}
+                  onChangeCapture={() => cepToNumberRef}
                   />
                 <label className="text">Rua</label>
                 <input
@@ -195,7 +202,6 @@ const Dashboard: React.FC = () => {
                   type="text"
                   autoComplete="off"
                   value = {street}
-                  autoFocus
                   onChange={(event) => setStreet(event.target.value)}
                 />
                 <label className="text">Número</label>
@@ -204,9 +210,9 @@ const Dashboard: React.FC = () => {
                   type="text"
                   autoComplete="off"
                   value = {number}
-                  autoFocus
-                  // onClick={handleFocus}
+                  maxLength="4"
                   onChange={(event) => setNumber(event.target.value)}
+                  ref={inputRef}
 
                 />
                 <label className="text">Bairro</label>
@@ -215,7 +221,6 @@ const Dashboard: React.FC = () => {
                   type="text"
                   autoComplete="off"
                   value ={district}
-                  autoFocus
                   onChange={(event) => setDistrict(event.target.value)}
                 />
                 <label className="text">Cidade</label>
@@ -224,7 +229,6 @@ const Dashboard: React.FC = () => {
                   type="text"
                   autoComplete="off"
                   value = {city}
-                  autoFocus
                   onChange={(event) => setCity(event.target.value)}
                 />
               </div>

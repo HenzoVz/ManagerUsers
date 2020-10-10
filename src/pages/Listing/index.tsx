@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from '../../components/Header';
@@ -8,7 +8,7 @@ import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import notData  from '../../assets/nodata-found.png';
 
-import { Table, Image } from './styles';
+import { Table, Container, Image } from './styles';
 
 import { BiEditAlt, BsTrash } from 'react-icons/all';
 
@@ -31,9 +31,26 @@ interface Data {
 const Listing: React.FC = () => {
 
   const [data, setData] = useState<Data[]>([]);
+  const [name, setName] = useState('');
+
   const [loading, setLoading] = useState(false);
 
   const notify = (text: ToastContent) => toast(text);
+
+  function handleSearch() {
+    if(!name) {
+      notify("Erro na busca");
+      setData(data);
+    }
+    setLoading(true);
+    api.get(`cadastros?q=${name}`).then(response => {
+      const newData = response.data;
+      setData(newData);
+      setLoading(false);
+    }).catch(() => {
+      notify("Registro não encontrado");
+    });
+  };
 
   useEffect(() => {
     setLoading(true)
@@ -67,37 +84,51 @@ const Listing: React.FC = () => {
             <img className="not-data" src={notData} alt="Sem dados"/>
           </Image>
         ) : (
-      <Table>
-          <thead>
-          <tr>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th>Email</th>
-            <th>Cidade</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-            {data.map(user => (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.cpf}</td>
-                <td>{user.email}</td>
-                <td>{user.adress.city}</td>
-                <td>
-                  <Link key={user.id} to={`usuario/${user.id}`}>
-                    <button className="button-edit" onClick={() => console.log(user.id)}>
-                      <BiEditAlt size={20} />
+
+        <>
+          <Container>
+          <input
+            className="input"
+            type="text"
+            autoComplete="off"
+            value = {name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="Pesquisar pelo nome"
+            />
+            <button onClick={handleSearch}>Pesquisar</button>
+          </Container>
+        <Table>
+            <thead>
+            <tr>
+              <th>Nome</th>
+              <th>CPF</th>
+              <th>Email</th>
+              <th>Cidade</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+              {data.map(user => (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  <td>{user.cpf}</td>
+                  <td>{user.email}</td>
+                  <td>{user.adress.city}</td>
+                  <td>
+                    <Link key={user.id} to={`usuario/${user.id}`}>
+                      <button className="button-edit" onClick={() => console.log(user.id)}>
+                        <BiEditAlt size={20} />
+                      </button>
+                    </Link>
+                    <button className="button-delete" onClick={() => deleteData(user.id)}>
+                      <BsTrash size={20} />
                     </button>
-                  </Link>
-                  <button className="button-delete" onClick={() => deleteData(user.id)}>
-                    <BsTrash size={20} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-         </tbody>
-        </Table>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+          </Table>
+        </>
         )}
       </>
       )}

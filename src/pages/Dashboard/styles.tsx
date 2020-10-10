@@ -45,14 +45,15 @@ export const Container = styled.div`
     display: flex;
     margin: 0 auto;
     margin-top: 10px;
-    height: 30px;
     width: 150px;
+    height: calc(1.5em + 0.75rem + 2px);
     justify-content: center;
     align-items: center;
-    border: 2px solid #495057;
-    border-radius: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
     font-weight: bold;
     color: #495057;
+    font-weight: bold;
 
 
     &:hover {
