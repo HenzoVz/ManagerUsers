@@ -97,19 +97,6 @@
         "district": "Sé",
         "city": "São Paulo"
       }
-    },
-    {
-      "id": "888378f6-ccb0-49a2-b046-fab0cbb25185",
-      "name": "karen",
-      "cpf": "156.151.516-51",
-      "email": "jaren@gmail.com",
-      "adress": {
-        "cep": "01001-000",
-        "street": "Praça da Sé",
-        "number": "1414",
-        "district": "Sé",
-        "city": "São Paulo"
-      }
     }
   ]
 }

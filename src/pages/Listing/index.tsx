@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from '../../components/Header';
@@ -28,6 +28,7 @@ interface Data {
   }
 }
 
+
 const Listing: React.FC = () => {
 
   const [data, setData] = useState<Data[]>([]);
@@ -38,23 +39,31 @@ const Listing: React.FC = () => {
   const notify = (text: ToastContent) => toast(text);
 
   function handleSearch() {
-    if(!name) {
-      notify("Erro na busca");
-      setData(data);
+    if(name.length === 0) {
+      notify("Campo obrigatório");
+    } else {
+      setLoading(true);
+      api.get<Data[]>(`cadastros?q=${name}`).then(response => {
+        const newData = response.data;
+        if (newData.length === 0) {
+          notify("Registro não encontrado");
+          setLoading(false);
+          setData(data);
+          return data;
+        } else {
+          setData(newData);
+          setLoading(false);
+          console.log(newData)
+        }
+      }).catch(() => {
+        notify("Registro não encontrado");
+      });
     }
-    setLoading(true);
-    api.get(`cadastros?q=${name}`).then(response => {
-      const newData = response.data;
-      setData(newData);
-      setLoading(false);
-    }).catch(() => {
-      notify("Registro não encontrado");
-    });
   };
 
   useEffect(() => {
     setLoading(true)
-    api.get('cadastros').then(response => {
+    api.get<Data[]>('cadastros').then(response => {
       const newData = response.data;
       setData(newData);
       setLoading(false);
