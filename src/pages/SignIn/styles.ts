@@ -52,8 +52,10 @@ export const Page = styled.div`
     }
 
     button {
+      margin: 0 auto;
       padding: 10px 20px;
       margin-bottom: 10px;
+      width: 80%;
       border: 1px solid #ced4da;
       border-radius: 0.25rem;
       background: #000;

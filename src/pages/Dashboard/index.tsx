@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useRef, FormEvent } from 'react';
+import React, { useState, useEffect, useCallback, useRef, FormEvent } from 'react';
 import { FaMapMarkedAlt, AiOutlineDatabase } from 'react-icons/all';
+import { ToastContainer, toast, ToastContent } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {useParams} from 'react-router-dom';
 import { uuid } from 'uuidv4';
 
-import Header from '../../components/Header';
-import { Container } from './styles';
-
-import { ToastContainer, toast, ToastContent } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
 import { api, viaCep } from '../../services/apis';
 import { cpfMask, cepMask } from '../../utils/mask';
+
+import Header from '../../components/Header';
+import Input from '../../components/Input';
+
+import { Container } from './styles';
 
 interface Params {
   id: string;
@@ -18,14 +19,14 @@ interface Params {
 
 const Dashboard: React.FC = () => {
 
-  const [name, setName] =  useState<string>('');
-  const [cpf, setCpf] =  useState<string>('');
-  const [email, setEmail] =  useState<string>('');
-  const [cep, setCep] =  useState<string>('');
-  const [street, setStreet] =  useState<string>('');
-  const [number, setNumber] =  useState<string>('');
-  const [district, setDistrict] =  useState<string>('');
-  const [city, setCity] =  useState<string>('');
+  const [name, setName] =  useState('');
+  const [cpf, setCpf] =  useState('');
+  const [email, setEmail] =  useState('');
+  const [cep, setCep] =  useState('');
+  const [street, setStreet] =  useState('');
+  const [number, setNumber] =  useState('');
+  const [district, setDistrict] =  useState('');
+  const [city, setCity] =  useState('');
 
 
   const notify = (text: ToastContent) => toast(text);
@@ -38,19 +39,20 @@ const Dashboard: React.FC = () => {
   const cpfValidation = require('validar-cpf');
   const validation = cpfValidation(cpf)
 
-  function isNumber(value: string) {
-    return /^[0-9\b]+$/.test(value);
-  }
+  const isNumber = useCallback((value: string) => {
+   return /^[0-9\b]+$/.test(value)
+  }, []);
 
-  function cepToNumberRef() {
+  const cepToNumberRef = useCallback(() => {
     if (cep.length === 8) {
       return inputRef.current?.focus()
     }
     return;
-  }
+  }, [cep]);
 
-  function handleAddUser(event: FormEvent<HTMLFormElement>) {
+  const handleAddUser = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (!name) {
       notify("Nome é obrigatório")
     } else if (!email){
@@ -112,7 +114,7 @@ const Dashboard: React.FC = () => {
         });
       }
     }
-  };
+  }, [name, email, cpf, cep, street, number, district, city, isNumber, params]);
 
   useEffect(() => {
       if(cep.length === 8) {
@@ -127,9 +129,9 @@ const Dashboard: React.FC = () => {
         } catch(err) {
           notify("Erro ao busca CEP");
         }
-        cepToNumberRef();
       };
-  }, [cep])
+      cepToNumberRef();
+  }, [cep, cepToNumberRef])
 
   useEffect(() => {
     function verifyCPF() {
@@ -154,8 +156,7 @@ const Dashboard: React.FC = () => {
            <AiOutlineDatabase size={25} /> <span  className="title">Dados pessoais</span>
             <div className="wrapper-input">
               <label className="text">Nome</label>
-              <input
-                className="input"
+              <Input
                 type="text"
                 autoComplete="off"
                 value = {name}
@@ -163,16 +164,14 @@ const Dashboard: React.FC = () => {
                 onChange={(event) => setName(event.target.value)}
               />
               <label className="text">Email</label>
-              <input
-                className="input"
+              <Input
                 type="email"
                 autoComplete="off"
                 value = {email}
                 onChange={(event) => setEmail(event.target.value)}
               />
               <label className="text">CPF</label>
-              <input
-                  className="input"
+              <Input
                   type="text"
                   autoComplete="off"
                   value = {cpf}
@@ -185,8 +184,7 @@ const Dashboard: React.FC = () => {
             <FaMapMarkedAlt size={25}/> <span className="title">Dados residenciais</span>
               <div className="wrapper-input">
                 <label className="text">CEP</label>
-                <input
-                  className="input"
+                <Input
                   type="text"
                   autoComplete="off"
                   value = {cep}
@@ -195,35 +193,30 @@ const Dashboard: React.FC = () => {
                   onChangeCapture={() => cepToNumberRef}
                   />
                 <label className="text">Rua</label>
-                <input
-                  className="input"
+                <Input
                   type="text"
                   autoComplete="off"
                   value = {street}
                   onChange={(event) => setStreet(event.target.value)}
                 />
                 <label className="text">Número</label>
-                <input
-                  className="input"
+                <Input
                   type="text"
                   autoComplete="off"
                   value = {number}
                   maxLength="4"
                   onChange={(event) => setNumber(event.target.value)}
-                  ref={inputRef}
 
                 />
                 <label className="text">Bairro</label>
-                <input
-                  className="input"
+                <Input
                   type="text"
                   autoComplete="off"
                   value ={district}
                   onChange={(event) => setDistrict(event.target.value)}
                 />
                 <label className="text">Cidade</label>
-                <input
-                  className="input"
+                <Input
                   type="text"
                   autoComplete="off"
                   value = {city}

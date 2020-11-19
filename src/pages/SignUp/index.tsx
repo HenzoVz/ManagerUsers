@@ -1,26 +1,24 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useCallback, FormEvent } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { BiUser, FiUser, RiLockPasswordLine } from 'react-icons/all'
 import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import { uuid } from 'uuidv4';
+
 import { api } from '../../services/apis';
 
+import Input from '../../components/Input';
 import { Page } from './styles';
-
-
 
 const SingUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-
   const notify = (text: ToastContent) => toast(text);
 
   const history = useHistory();
 
-  function handleCreateUser(event: FormEvent<HTMLFormElement>) {
+  const handleCreateUser = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!email) {
@@ -48,7 +46,7 @@ const SingUp: React.FC = () => {
         history.push('/');
       });
     }
-  };
+  }, [email, password]);
 
   return (
     <Page>
@@ -57,7 +55,7 @@ const SingUp: React.FC = () => {
       <form onSubmit={handleCreateUser}>
         <div className="form-div">
           <FiUser size={30}/>
-          <input
+          <Input
             type="email"
             autoComplete="off"
             autoFocus
@@ -70,7 +68,7 @@ const SingUp: React.FC = () => {
         <br/>
         <div className="form-div">
           <RiLockPasswordLine size={30} />
-          <input
+          <Input
             type="password"
             autoComplete="off"
             autoFocus

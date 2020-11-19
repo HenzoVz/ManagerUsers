@@ -1,22 +1,23 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import { useAuth } from '../../hooks/AuthContext';
-import { Link } from 'react-router-dom';
-
+import React, { useState, useEffect, FormEvent, useCallback } from 'react';
 import { FiLogIn, FiUser,  } from 'react-icons/fi'
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { ToastContainer, toast, ToastContent } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../../hooks/AuthContext';
+import { Link } from 'react-router-dom';
 
+import Input from '../../components/Input';
 import { Page } from './styles';
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const notify = (text: ToastContent) => toast(text);
 
   const { signIn }  = useAuth();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const handleSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!email) {
@@ -29,14 +30,11 @@ const SignIn: React.FC = () => {
         password: password
       });
     }
-  };
+  }, []);
 
   useEffect(() => {
 
   }, [signIn])
-
-  const notify = (text: ToastContent) => toast(text);
-
 
   return (
     <Page>
@@ -45,7 +43,7 @@ const SignIn: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div className="form-div">
           <FiUser size={30}/>
-          <input
+          <Input
             type="email"
             autoComplete="off"
             autoFocus
@@ -58,7 +56,7 @@ const SignIn: React.FC = () => {
         <br/>
         <div className="form-div">
           <RiLockPasswordLine size={30} />
-          <input
+          <Input
             type="password"
             autoComplete="off"
             autoFocus
