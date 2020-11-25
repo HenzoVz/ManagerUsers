@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent, useCallback } from 'react';
+import React, { useState, FormEvent, useCallback } from 'react';
 import { FiLogIn, FiUser,  } from 'react-icons/fi'
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { ToastContainer, toast, ToastContent } from 'react-toastify';
@@ -30,11 +30,7 @@ const SignIn: React.FC = () => {
         password: password
       });
     }
-  }, []);
-
-  useEffect(() => {
-
-  }, [signIn])
+  }, [signIn, email, password]);
 
   return (
     <Page>

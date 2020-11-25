@@ -46,7 +46,7 @@ const SingUp: React.FC = () => {
         history.push('/');
       });
     }
-  }, [email, password]);
+  }, [email, password, history]);
 
   return (
     <Page>
