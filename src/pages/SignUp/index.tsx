@@ -1,92 +1,93 @@
-import React, { useState, useCallback, FormEvent } from 'react';
+import React, { useRef, useCallback } from 'react';
+import { FiMail, FiLock, FiUser, FiArrowRight } from 'react-icons/fi';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
-import { BiUser, FiUser, RiLockPasswordLine } from 'react-icons/all'
-import { ToastContainer, toast, ToastContent } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { uuid } from 'uuidv4';
+import { toast } from 'react-toastify';
+
+
+import getValidationErrors from '../../utils/getValidationErros';
+import notify from '../../utils/toast';
+
+import logoImg from '../../assets/logo.png';
 
 import { api } from '../../services/apis';
 
 import Input from '../../components/Input';
-import { Page } from './styles';
+import { Container, Content, AnimationContainer } from './styles';
+import Button from '../../components/Button';
+
+interface SingUpFormData {
+  name: string;
+  email: string;
+  password: string;
+}
 
 const SingUp: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const notify = (text: ToastContent) => toast(text);
 
+  const formRef = useRef<FormHandles>(null);
   const history = useHistory();
 
-  const handleCreateUser = useCallback((event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(async (data: SingUpFormData) => {
+    try {
+      formRef.current?.setErrors({});
 
-    if (!email) {
-      notify("Email é obrigatório");
-    } else if (!password) {
-      notify("Senha é obrigatório");
-    } else if (password.length < 4) {
-      notify("Senha curta");
-    } else {
-
-      const dataRegister = {
-        id: uuid(),
-        email: email,
-        password: password
-      }
-
-      api.post('signup', dataRegister)
-      .then(() => {
-        notify("Cadastro Realizado")
-      })
-      .catch(() => {
-        notify("Erro ao cadastrar");
-      })
-      .finally(() => {
-        history.push('/');
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Nome obrigatório'),
+        email: Yup.string()
+        .required('E-mail obrigatório')
+        .email('Digite um e-mail válido'),
+        password: Yup.string()
+        .min(6, 'No mínimo 6 dígitos')
       });
+
+      await schema.validate(data, {
+        abortEarly: false
+      });
+
+      await api.post('/users', data);
+
+      notify(toast.success, 'Cadastro realizado!')
+
+      setInterval(() => {
+        history.push('/');
+      }, 3000)
+
+
+    } catch (error) {
+      if(error instanceof Yup.ValidationError) {
+
+        const errors = getValidationErrors(error);
+        formRef.current?.setErrors(errors);
+
+        notify(toast.error, 'Erro no cadastro');
+        return;
+      }
     }
-  }, [email, password, history]);
+  }, [history]);
 
   return (
-    <Page>
-      <ToastContainer/>
-      <h1>Fazer Cadastro <BiUser size={40}/></h1>
-      <form onSubmit={handleCreateUser}>
-        <div className="form-div">
-          <FiUser size={30}/>
-          <Input
-            type="email"
-            autoComplete="off"
-            autoFocus
-            value={email}
-            placeholder="Digite o seu email"
-            maxLength="50"
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <br/>
-        <div className="form-div">
-          <RiLockPasswordLine size={30} />
-          <Input
-            type="password"
-            autoComplete="off"
-            autoFocus
-            value={password}
-            maxLength="20"
-            placeholder="Digite sua senha"
-            onChange={event => setPassword(event.target.value)}
-          />
-          </div>
-        <br/>
-          <button type="submit">Cadastrar</button>
-          <br/>
-        <Link to="/">
-          <h3>Voltar login</h3>
-        </Link>
-        <hr/>
-      </form>
-    </Page>
+    <Container>
+      <AnimationContainer>
+        <img src={logoImg} alt="Manager Users" style={{ backgroundSize: 'cover', width: '200px', height: '200px', paddingTop: '50px'}}/>
+        <Content>
+          <h1>Fazer Cadastro</h1>
+          <Form ref={formRef} onSubmit={handleSubmit}>
+            <Input name="name" icon={FiUser} placeholder="Seu nome"/>
+            <Input name="email" icon={FiMail} placeholder="Seu e-mail"/>
+            <Input name="password" icon={FiLock} placeholder="Sua senha"/>
+
+            <Button type="submit">Cadastrar</Button>
+          </Form>
+          <Link to="/">
+            <FiArrowRight />
+            Voltar para logon
+          </Link>
+        </Content>
+      </AnimationContainer>
+    </Container>
   )
 }
 

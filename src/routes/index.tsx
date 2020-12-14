@@ -5,16 +5,16 @@ import Route from './Route';
 
 import SingUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
-import Dashboard from '../pages/Dashboard';
-import Listing from '../pages/Listing';
+// import Dashboard from '../pages/Dashboard';
+// import Listing from '../pages/Listing';
 
 const Routes: React.FC = () => (
   <Switch>
       <Route path="/" exact component={SignIn} />
       <Route path="/signup" component={SingUp} />
-      <Route path="/dashboard"  component={Dashboard} isPrivate/>
-      <Route path="/usuario/:id"  component={Dashboard} isPrivate/>
-      <Route path="/listagem"  component={Listing} isPrivate/>
+      {/* <Route path="/dashboard"  component={Dashboard} isPrivate/> */}
+      {/* <Route path="/usuario/:id"  component={Dashboard} isPrivate/> */}
+      {/* <Route path="/listagem"  component={Listing} isPrivate/> */}
   </Switch>
 );
 

@@ -1,4 +1,4 @@
-export const cpfMask = (value: string) => {
+const cpfMask = (value: string) => {
   return value
     .replace(/\D/g, '')
     .replace(/(\d{3})(\d)/, '$1.$2')
@@ -7,7 +7,9 @@ export const cpfMask = (value: string) => {
     .replace(/(-\d{2})\d+?$/, '$1')
 }
 
-export const cepMask = (value: string) => {
+const cepMask = (value: string) => {
   return value
   .substring(0,5) + "-" + value.substring(5);
 }
+
+export { cpfMask, cepMask };

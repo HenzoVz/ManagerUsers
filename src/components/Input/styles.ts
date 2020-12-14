@@ -1,14 +1,49 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.input`
-    font-weight: 400;
-    max-width: 650px;
-    line-height: 1.5;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    padding: 2px;
-    margin: 3px;
-    height: calc(1.5em + 0.75rem + 2px);
-`;
+
+interface ContainerProps {
+  isFocused: boolean;
+  isFilled: boolean;
+  isErrored: boolean;
+}
+
+export const Container = styled.div<ContainerProps>`
+  background: #393e46;
+  border-radius: 10px;
+  border: 2px solid #393e46;
+  padding: 16px;
+  color: #eeeeee;
+
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+
+  & + div {
+    margin-top: 8px;
+  }
+
+  ${props => props.isErrored && css`
+    border-color: #c53030;
+  `}
+  ${props => props.isFocused && css`
+    color: #00adb5
+;
+    border-color: #00adb5;
+  `}
+  ${props => props.isFilled && css`
+    color: #00adb5;
+  `}
+
+  input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: #eeeeee;
+    &::placeholder {
+      color: #eeeeee;
+    }
+  }
+  svg {
+    margin-right: 16px;
+  }
+  `;

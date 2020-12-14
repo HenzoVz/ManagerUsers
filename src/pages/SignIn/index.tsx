@@ -1,77 +1,91 @@
-import React, { useState, FormEvent, useCallback } from 'react';
-import { FiLogIn, FiUser,  } from 'react-icons/fi'
-import { RiLockPasswordLine } from 'react-icons/ri';
-import { ToastContainer, toast, ToastContent } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useRef, useCallback } from 'react';
+import { FiMail, FiLock, FiArrowLeft } from 'react-icons/fi';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import * as Yup from 'yup';
+import { Link, useHistory } from 'react-router-dom';
+
+import { toast } from 'react-toastify';
+import getValidationErrors from '../../utils/getValidationErros';
+import notify from '../../utils/toast';
+
+import logoImg from '../../assets/logo.png';
+
 import { useAuth } from '../../hooks/AuthContext';
-import { Link } from 'react-router-dom';
 
 import Input from '../../components/Input';
-import { Page } from './styles';
+import Button from '../../components/Button';
+import { Container, Content, AnimationContainer } from './styles';
 
-const SignIn: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const notify = (text: ToastContent) => toast(text);
-
-  const { signIn }  = useAuth();
-
-  const handleSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!email) {
-      notify("Usuário não existe");
-    } else if (!password) {
-      notify("Usuário não existe");
-    } else {
-      signIn({
-        email: email,
-        password: password
-      });
-    }
-  }, [signIn, email, password]);
-
-  return (
-    <Page>
-      <ToastContainer/>
-      <h1>Fazer Login <FiLogIn size={40}/></h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-div">
-          <FiUser size={30}/>
-          <Input
-            type="email"
-            autoComplete="off"
-            autoFocus
-            value={email}
-            placeholder="Digite o seu email"
-            maxLength="50"
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <br/>
-        <div className="form-div">
-          <RiLockPasswordLine size={30} />
-          <Input
-            type="password"
-            autoComplete="off"
-            autoFocus
-            value={password}
-            maxLength="20"
-            placeholder="Digite sua senha"
-            onChange={event => setPassword(event.target.value)}
-          />
-          </div>
-        <br/>
-      <button type="submit">Entrar</button>
-      <br/>
-      <Link to="/signup">
-        <h3>Criar conta</h3>
-      </Link>
-        <hr/>
-      </form>
-    </Page>
-  )
+interface SignInFormData {
+  email: string;
+  password: string;
 }
 
+const SignIn: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
+
+  const { signIn } = useAuth();
+  const history = useHistory();
+
+  const handleSubmit = useCallback(async (data: SignInFormData) => {
+    try {
+      formRef.current?.setErrors({});
+
+      const schema = Yup.object().shape({
+        email: Yup.string()
+        .required('E-mail obrigatório')
+        .email('Digite um e-mail válido'),
+        password: Yup.string()
+        .required('Senha obrigatória')
+
+      });
+
+      await schema.validate(data, {
+        abortEarly: false
+      });
+
+      await signIn({
+        email: data.email,
+        password: data.password
+      });
+
+      history.push('/dashboard');
+    } catch (error) {
+      if(error instanceof Yup.ValidationError) {
+
+        const errors = getValidationErrors(error);
+        formRef.current?.setErrors(errors);
+
+        notify(toast.error,'Ocorreu um erro ao fazer login, cheque as credenciais.')
+        return;
+      }
+    }
+  }, [signIn, history]);
+
+  return (
+    <Container>
+      <AnimationContainer>
+        <img src={logoImg} alt="Manager Users" style={{ backgroundSize: 'cover', width: '200px', height: '200px', paddingTop: '50px'}}/>
+        <Content>
+          <h1>Fazer Login</h1>
+          <Form ref={formRef} onSubmit={handleSubmit}>
+            <Input name="email" icon={FiMail}/>
+            <Input name="password" icon={FiLock}/>
+
+            <Button type="submit">Entrar</Button>
+
+
+          </Form>
+            <a href="forgot">Esqueci minha senha</a>
+            <Link to="/signup">
+              <FiArrowLeft />
+              Criar conta
+            </Link>
+        </Content>
+      </AnimationContainer>
+    </Container>
+
+  )
+}
 export default SignIn;
