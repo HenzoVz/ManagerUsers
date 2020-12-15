@@ -1,21 +1,19 @@
 import React, { useRef, useCallback } from 'react';
-import { FiMail, FiLock, FiUser, FiArrowRight } from 'react-icons/fi';
+import { FiMail, FiLock, FiUser } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
-
+import { useToasts } from 'react-toast-notifications';
 
 import getValidationErrors from '../../utils/getValidationErros';
-import notify from '../../utils/toast';
 
 import logoImg from '../../assets/logo.png';
 
 import { api } from '../../services/apis';
 
 import Input from '../../components/Input';
-import { Container, Content, AnimationContainer } from './styles';
+import { Container, Content, AnimationContainer, Box1, Box2 } from './styles';
 import Button from '../../components/Button';
 
 interface SingUpFormData {
@@ -29,6 +27,7 @@ const SingUp: React.FC = () => {
 
   const formRef = useRef<FormHandles>(null);
   const history = useHistory();
+  const { addToast } = useToasts();
 
   const handleSubmit = useCallback(async (data: SingUpFormData) => {
     try {
@@ -49,11 +48,12 @@ const SingUp: React.FC = () => {
 
       await api.post('/users', data);
 
-      notify(toast.success, 'Cadastro realizado!')
+      addToast(
+        'Cadastro realizado! Agora pode fazer login', {
+        appearance: 'success', autoDismiss: true
+      })
 
-      setInterval(() => {
-        history.push('/');
-      }, 3000)
+      history.push('/');
 
 
     } catch (error) {
@@ -62,29 +62,37 @@ const SingUp: React.FC = () => {
         const errors = getValidationErrors(error);
         formRef.current?.setErrors(errors);
 
-        notify(toast.error, 'Erro no cadastro');
+        addToast(
+          'Erro no cadastro',{
+          appearance: 'error', autoDismiss: true})
         return;
       }
     }
-  }, [history]);
+  }, [history, addToast]);
 
   return (
     <Container>
       <AnimationContainer>
         <img src={logoImg} alt="Manager Users" style={{ backgroundSize: 'cover', width: '200px', height: '200px', paddingTop: '50px'}}/>
         <Content>
+          <Box1>
           <h1>Fazer Cadastro</h1>
-          <Form ref={formRef} onSubmit={handleSubmit}>
-            <Input name="name" icon={FiUser} placeholder="Seu nome"/>
-            <Input name="email" icon={FiMail} placeholder="Seu e-mail"/>
-            <Input name="password" icon={FiLock} placeholder="Sua senha"/>
+            <Form ref={formRef} onSubmit={handleSubmit}>
+              <Input name="name" icon={FiUser} placeholder="Seu nome"/>
+              <Input name="email" icon={FiMail} placeholder="Seu e-mail"/>
+              <Input name="password" icon={FiLock} placeholder="Sua senha"/>
 
-            <Button type="submit">Cadastrar</Button>
-          </Form>
-          <Link to="/">
-            <FiArrowRight />
-            Voltar para logon
-          </Link>
+              <Button type="submit">Cadastrar</Button>
+            </Form>
+          </Box1>
+
+          <Box2>
+            <h1>Olá, Amigo!</h1>
+            <p>Entre com suas credenciais e comece sua jornada conosco</p>
+            <Link to="/">
+              Voltar para login
+            </Link>
+          </Box2>
         </Content>
       </AnimationContainer>
     </Container>

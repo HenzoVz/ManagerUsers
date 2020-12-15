@@ -1,21 +1,20 @@
 import React, { useRef, useCallback } from 'react';
-import { FiMail, FiLock, FiArrowLeft } from 'react-icons/fi';
+import { FiMail, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 
-import { toast } from 'react-toastify';
+
 import getValidationErrors from '../../utils/getValidationErros';
-import notify from '../../utils/toast';
+import { useAuth } from '../../hooks/AuthContext';
 
 import logoImg from '../../assets/logo.png';
 
-import { useAuth } from '../../hooks/AuthContext';
-
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import { Container, Content, AnimationContainer } from './styles';
+import { Container, Content, AnimationContainer, Box1, Box2 } from './styles';
 
 interface SignInFormData {
   email: string;
@@ -27,6 +26,7 @@ const SignIn: React.FC = () => {
 
   const { signIn } = useAuth();
   const history = useHistory();
+  const { addToast } = useToasts();
 
   const handleSubmit = useCallback(async (data: SignInFormData) => {
     try {
@@ -56,18 +56,21 @@ const SignIn: React.FC = () => {
 
         const errors = getValidationErrors(error);
         formRef.current?.setErrors(errors);
-
-        notify(toast.error,'Ocorreu um erro ao fazer login, cheque as credenciais.')
+        console.log(        formRef.current?.setErrors(errors))
         return;
       }
+      addToast(
+        'Ocorreu um erro ao fazer login, cheque as credenciais.',
+       { appearance: 'error', autoDismiss: true})
     }
-  }, [signIn, history]);
+  }, [signIn, addToast, history]);
 
   return (
     <Container>
       <AnimationContainer>
-        <img src={logoImg} alt="Manager Users" style={{ backgroundSize: 'cover', width: '200px', height: '200px', paddingTop: '50px'}}/>
+      <img src={logoImg} alt="Managers Users"/>
         <Content>
+          <Box1>
           <h1>Fazer Login</h1>
           <Form ref={formRef} onSubmit={handleSubmit}>
             <Input name="email" icon={FiMail}/>
@@ -75,13 +78,18 @@ const SignIn: React.FC = () => {
 
             <Button type="submit">Entrar</Button>
 
-
           </Form>
             <a href="forgot">Esqueci minha senha</a>
+          </Box1>
+
+          <Box2>
+            <h1>Olá, Amigo!</h1>
+            <p>Entre com suas credenciais e comece sua jornada conosco</p>
             <Link to="/signup">
-              <FiArrowLeft />
               Criar conta
             </Link>
+          </Box2>
+
         </Content>
       </AnimationContainer>
     </Container>
