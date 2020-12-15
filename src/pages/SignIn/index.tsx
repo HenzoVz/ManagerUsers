@@ -56,7 +56,6 @@ const SignIn: React.FC = () => {
 
         const errors = getValidationErrors(error);
         formRef.current?.setErrors(errors);
-        console.log(        formRef.current?.setErrors(errors))
         return;
       }
       addToast(
