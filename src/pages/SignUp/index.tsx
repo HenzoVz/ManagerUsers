@@ -10,7 +10,7 @@ import getValidationErrors from '../../utils/getValidationErros';
 
 import logoImg from '../../assets/logo.png';
 
-import { api } from '../../services/apis';
+import api  from '../../services/api';
 
 import Input from '../../components/Input';
 import { Container, Content, AnimationContainer, Box1, Box2 } from './styles';

@@ -8,11 +8,11 @@ interface ContainerProps {
 }
 
 export const Container = styled.div<ContainerProps>`
-  background: #393e46;
+  background: #a2d5f2;
   border-radius: 10px;
-  border: 2px solid #393e46;
+  border: 2px solid #fafafa;
   padding: 16px;
-  color: #eeeeee;
+  color: #fafafa;
 
   max-width: 100%;
   display: flex;
@@ -26,21 +26,21 @@ export const Container = styled.div<ContainerProps>`
     border-color: #c53030;
   `}
   ${props => props.isFocused && css`
-    color: #00adb5
+    color: #07689f
 ;
-    border-color: #00adb5;
+    border-color: #07689f;
   `}
   ${props => props.isFilled && css`
-    color: #00adb5;
+    color: #07689f;
   `}
 
   input {
     flex: 1;
     background: transparent;
     border: 0;
-    color: #eeeeee;
+    color: #000000;
     &::placeholder {
-      color: #eeeeee;
+      color: #000000;
     }
   }
   svg {

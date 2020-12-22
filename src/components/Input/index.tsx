@@ -4,15 +4,12 @@ import { IconBaseProps } from 'react-icons';
 
 import {Container} from './styles';
 
-type HTMLInputProps = InputHTMLAttributes<HTMLInputElement>
-
-type InputProps = {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement>{
   name: string;
-  maxLength?: number | string;
   icon?: React.ComponentType<IconBaseProps>;
-} & Omit<HTMLInputProps, 'maxLength'>
+}
 
-const Input: React.FC<InputProps> = ({icon: Icon, name, maxLength, ...rest}) => {
+const Input: React.FC<InputProps> = ({icon: Icon, name, ...rest}) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
@@ -20,12 +17,12 @@ const Input: React.FC<InputProps> = ({icon: Icon, name, maxLength, ...rest}) => 
 
   const handleInputFocus = useCallback(() => {
     setIsFocused(true);
-  }, [])
+  }, []);
 
-  const handleInputBlur = useCallback(() => {
+  const handleInputOnBlur = useCallback(() => {
     setIsFocused(false);
     setIsFilled(!!inputRef.current?.value);
-  }, [])
+  }, []);
 
   useEffect(() => {
     registerField({
@@ -41,7 +38,7 @@ const Input: React.FC<InputProps> = ({icon: Icon, name, maxLength, ...rest}) => 
       <input
       type={name}
       onFocus={handleInputFocus}
-      onBlur={handleInputBlur}
+      onBlur={handleInputOnBlur}
       defaultValue={defaultValue}
       ref={inputRef}
       {...rest}

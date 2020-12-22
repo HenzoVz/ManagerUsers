@@ -8,7 +8,7 @@ export const Container = styled.div`
   height: 100vh;
   width: 100%;
 
-  background: -webkit-linear-gradient(45deg, black 50%, white 50%);
+  background: -webkit-linear-gradient(45deg, #07689f 50%, #fafafa 50%);
 
   @media(max-width: 1070px) {
     background: none;
@@ -51,7 +51,7 @@ export const Box1 = styled.div`
   width: 100%;
   max-width: 535px;
   max-height: 600px;
-  background-color: #ffffff;
+  background-color: #fafafa;
 
   display: flex;
   flex-flow: column;
@@ -61,14 +61,14 @@ export const Box1 = styled.div`
 
     h1 {
     margin-bottom: 25px;
-    transition: margin-right 0.1s ease-in;
+    transition: margin-right color 0.3s ease-in;
 
     &:hover {
       margin-right: 10px;
     }
     &::first-letter {
       font-size: 46px;
-      color: #00adb5;
+      color: #a2d5f2;
     }
   }
 
@@ -77,13 +77,13 @@ export const Box1 = styled.div`
     align-items: center;
     margin-top: 20px;
     text-decoration: none;
-    color: #00adb5;
+    color: #a2d5f2;
     font-weight: bold;
-    transition: margin-right color 0.3s ease-in;
+    transition: font-size color 0.3s ease-in;
 
     &:hover {
-      color: ${shade(0.2, '#00adb5')};
-      margin-right: 10px;
+      color: ${shade(0.2, '#a2d5f2')};
+      font-size: 16px;
     }
 
     svg {
@@ -97,7 +97,7 @@ export const Box2 = styled.div`
   max-width: 100%;
   height: 100%;
   max-height: 600px;
-  background-color: #000000;
+  background-color: #07689f;
 
   display: flex;
   flex-flow: column wrap;
@@ -105,7 +105,7 @@ export const Box2 = styled.div`
   align-items: center;
 
   h1 {
-    color: #eeeeee;
+    color: #fafafa;
     margin-bottom: 25px;
     transition: margin-right 0.1s ease-in;
 
@@ -114,11 +114,11 @@ export const Box2 = styled.div`
     }
     &::first-letter {
       font-size: 46px;
-      color: #00adb5;
+      color: #a2d5f2;
     }
   }
   p {
-    color: #eeeeee;
+    color: #fafafa;
     word-wrap: break-word;
     padding: 10px;
   }
@@ -128,13 +128,13 @@ export const Box2 = styled.div`
     align-items: center;
     margin-top: 20px;
     text-decoration: none;
-    color: #00adb5;
+    color: #a2d5f2;
     font-weight: bold;
-    transition: margin-right color 0.3s ease-in;
+    transition: font-size color 0.3s ease-in;
 
     &:hover {
-      color: ${shade(0.2, '#00adb5')};
-      margin-right: 10px;
+      color: ${shade(0.3, '#a2d5f2')};
+      font-size: 16px;
     }
 
   }

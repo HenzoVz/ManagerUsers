@@ -1,245 +1,137 @@
-// import React, { useState, useEffect, useCallback, useRef, FormEvent } from 'react';
-// import { FaMapMarkedAlt, AiOutlineDatabase } from 'react-icons/all';
-// import { ToastContainer, toast, ToastContent } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import {useParams} from 'react-router-dom';
-// import { uuid } from 'uuidv4';
+import React, { useCallback, useRef } from 'react';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import * as Yup from 'yup';
+import { FiUser, FiMail, RiFileUserLine, FiMap, FiHome, GiModernCity } from 'react-icons/all'
+import { useParams } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 
-// import { api, viaCep } from '../../services/apis';
-// import { cpfMask, cepMask } from '../../utils/mask';
+import getValidationErrors from '../../utils/getValidationErros';
+import { useAuth } from '../../hooks/AuthContext';
 
-// import Header from '../../components/Header';
-// import Input from '../../components/Input';
+import  api  from '../../services/api';
+import viaCep from '../../services/viaCep';
 
-// import { Container } from './styles';
+import Header from '../../components/Header';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
-// interface Params {
-//   id: string;
-// }
+import { Container } from './styles';
 
-// const Dashboard: React.FC = () => {
+interface Params {
+  id: string;
+}
 
-//   const [name, setName] =  useState('');
-//   const [cpf, setCpf] =  useState('');
-//   const [email, setEmail] =  useState('');
-//   const [cep, setCep] =  useState('');
-//   const [street, setStreet] =  useState('');
-//   const [number, setNumber] =  useState('');
-//   const [district, setDistrict] =  useState('');
-//   const [city, setCity] =  useState('');
-
-
-//   const notify = (text: ToastContent) => toast(text);
-
-//   const params = useParams<Params>();
-
-//   const inputRef = useRef<HTMLInputElement>(null);
-
-
-//   const cpfValidation = require('validar-cpf');
-//   const validation = cpfValidation(cpf)
-
-//   const isNumber = useCallback((value: string) => {
-//    return /^[0-9\b]+$/.test(value)
-//   }, []);
-
-//   const cepToNumberRef = useCallback(() => {
-//     if (cep.length === 8) {
-//       return inputRef.current?.focus()
-//     }
-//     return;
-//   }, [cep]);
-
-//   const handleAddUser = useCallback((event: FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-
-//     if (!name) {
-//       notify("Nome é obrigatório")
-//     } else if (!email){
-//       notify("Email é obrigatório")
-//     } else if (!cpf){
-//       notify("CPF é obrigatório")
-//     } else if (!cep){
-//       notify("CEP é obrigatório")
-//     } else if (!street){
-//       notify("Rua é obrigatório")
-//     } else if (isNumber(number) !== true) {
-//       notify("Número inválido")
-//     } else if (!number){
-//       notify("Número é obrigatório")
-//     } else if (!district){
-//       notify("Bairro é obrigatório")
-//     } else if (!city){
-//       notify("Cidade é obrigatório")
-//     } else {
-
-//       const dataUser = {
-//         id: uuid(),
-//         name: name,
-//         cpf: cpfMask(cpf),
-//         email: email,
-//         adress: {
-//           cep: cep,
-//           street: street,
-//           number: number,
-//           district: district,
-//           city: city
-//         }
-//       };
-
-//       if (params.id) {
-//         api.put(`cadastros/${params.id}`, dataUser)
-//         .then(() => {
-//           notify("Edição realizada");
-//         })
-//         .catch(() => {
-//           notify("Houve um erro ao inserir")
-//         })
-//       } else {
-
-//         api.post('cadastros', dataUser)
-//         .then(() => {
-//           notify('Cadastro realizado')
-//           setName('');
-//           setEmail('');
-//           setCpf('');
-//           setCep('');
-//           setStreet('');
-//           setNumber('');
-//           setDistrict('');
-//           setCity('');
-//         })
-//         .catch(() => {
-//           notify('Houve um erro ao inserir')
-//         });
-//       }
-//     }
-//   }, [name, email, cpf, cep, street, number, district, city, isNumber, params]);
-
-//   useEffect(() => {
-//       if(cep.length === 8) {
-//         try {
-//           viaCep.get(`${cep}/json`).then(response => {
-//           const {cep, logradouro, bairro, localidade} = response.data
-//           setCep(cepMask(cep));
-//           setStreet(logradouro);
-//           setDistrict(bairro);
-//           setCity(localidade);
-//           });
-//         } catch(err) {
-//           notify("Erro ao busca CEP");
-//         }
-//       };
-//       cepToNumberRef();
-//   }, [cep, cepToNumberRef])
-
-//   useEffect(() => {
-//     function verifyCPF() {
-//       if (cpf.length === 11) {
-//         if(validation === true) {
-//             notify("CPF válido");
-//           } else {
-//             notify("CPF inválido");
-//           }
-//         }
-//       }
-//       verifyCPF();
-//   }, [cpf, validation]);
-
-//   return (
-//     <>
-//       <Header/>
-//       <ToastContainer/>
-//       <Container>
-//           <form onSubmit={handleAddUser}>
-//           <section className="wrapper-section">
-//            <AiOutlineDatabase size={25} /> <span  className="title">Dados pessoais</span>
-//             <div className="wrapper-input">
-//               <label className="text">Nome</label>
-//               <Input
-//                 type="text"
-//                 autoComplete="off"
-//                 value = {name}
-//                 autoFocus
-//                 onChange={(event) => setName(event.target.value)}
-//               />
-//               <label className="text">Email</label>
-//               <Input
-//                 type="email"
-//                 autoComplete="off"
-//                 value = {email}
-//                 onChange={(event) => setEmail(event.target.value)}
-//               />
-//               <label className="text">CPF</label>
-//               <Input
-//                   type="text"
-//                   autoComplete="off"
-//                   value = {cpf}
-//                   maxLength="14"
-//                   onChange={(event) => setCpf(event.target.value)}
-//                 />
-//             </div>
-//           </section>
-//           <section className="wrapper-section">
-//             <FaMapMarkedAlt size={25}/> <span className="title">Dados residenciais</span>
-//               <div className="wrapper-input">
-//                 <label className="text">CEP</label>
-//                 <Input
-//                   type="text"
-//                   autoComplete="off"
-//                   value = {cep}
-//                   maxLength="8"
-//                   onChange={(event) => setCep(event.target.value)}
-//                   onChangeCapture={() => cepToNumberRef}
-//                   />
-//                 <label className="text">Rua</label>
-//                 <Input
-//                   type="text"
-//                   autoComplete="off"
-//                   value = {street}
-//                   onChange={(event) => setStreet(event.target.value)}
-//                 />
-//                 <label className="text">Número</label>
-//                 <Input
-//                   type="text"
-//                   autoComplete="off"
-//                   value = {number}
-//                   maxLength="4"
-//                   onChange={(event) => setNumber(event.target.value)}
-
-//                 />
-//                 <label className="text">Bairro</label>
-//                 <Input
-//                   type="text"
-//                   autoComplete="off"
-//                   value ={district}
-//                   onChange={(event) => setDistrict(event.target.value)}
-//                 />
-//                 <label className="text">Cidade</label>
-//                 <Input
-//                   type="text"
-//                   autoComplete="off"
-//                   value = {city}
-//                   onChange={(event) => setCity(event.target.value)}
-//                 />
-//               </div>
-//             <button className="save" type="submit" >Salvar</button>
-//           </section>
-//           </form>
-//       </Container>
-//     </>
-//   )
-// };
-
-// export default Dashboard;
-
-
-import React from 'react'
+interface DashboardFormData {
+  name: string;
+  email: string;
+  cpf: string;
+  address: {
+    cep: string;
+    street: string;
+    number: string;
+    district: string;
+    city: string;
+  };
+}
 
 const Dashboard: React.FC = () => {
-return (
-  <h1>Dashboard</h1>
+  const formRef = useRef<FormHandles>(null);
+
+  const { user } = useAuth();
+  const { addToast } = useToasts();
+
+  const handleSubmit = useCallback(async (data: DashboardFormData) => {
+
+    try {
+      formRef.current?.setErrors({});
+
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Nome obrigatório'),
+        email: Yup.string().required('E-mail obrigatório').email('Digite um e-mail válido'),
+        cpf: Yup.string().required('CPF obrigatório').length(11),
+        cep: Yup.string().required('CEP obrigatório').length(9),
+        street: Yup.string().required('Rua obrigatória'),
+        number: Yup.string().required('Número obrigatório').length(4),
+        district: Yup.string().required('Bairro obrigatório'),
+        city: Yup.string().required('Cidade obrigatório')
+      });
+
+
+      await schema.validate(data, {
+        abortEarly: false
+      });
+
+      await api.post('/registries', {
+        registry_id: user.id,
+        ...data
+      }).finally(() => {
+        formRef?.current?.setData({});
+      });
+
+      addToast(
+        'Registro cadastrado com sucesso!', {
+        appearance: 'success', autoDismiss: true
+      })
+
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(error);
+        formRef.current?.setErrors(errors);
+
+        for( let index in errors) {
+          addToast(errors[index], { appearance: 'error', autoDismiss: true })
+        }
+      }
+
+    }
+  }, [addToast, user]);
+
+  const handleOnChangeCep = useCallback(() => {
+    const value = formRef.current?.getFieldValue("cep");
+
+    const cep = value?.replace(/[^0-9]/g, '');
+
+    if (cep?.length !== 8) {
+      return;
+    }
+
+    viaCep.get(`${cep}/json`).then(response => {
+      const { logradouro, bairro, localidade } = response.data;
+
+      formRef.current?.setFieldValue('cep', cep.substring(0,5) + "-" + value.substring(5));
+      formRef.current?.setFieldValue('street', logradouro);
+      formRef.current?.setFieldValue('district', bairro);
+      formRef.current?.setFieldValue('city', localidade);
+
+    }).finally(() => {
+      const numberInput = formRef.current?.getFieldRef('number');
+      numberInput.focus();
+    })
+
+  }, [] );
+
+  return (
+    <>
+      <Header/>
+      <Container>
+        <Form ref={formRef} onSubmit={handleSubmit}>
+
+          <Input name="name" icon={FiUser} placeholder="Digite o nome" autoCapitalize="true"/>
+          <Input name="email" icon={FiMail} placeholder="Digite o e-mail"/>
+          <Input name="cpf"  icon={RiFileUserLine} placeholder="Digite o cpf" maxLength={11}/>
+          <Input name="cep" icon={FiMap} placeholder="Digite o cep" maxLength={8} onChange={handleOnChangeCep}/>
+          <Input name="street" icon={FiMap} placeholder="Digite o nome da rua"/>
+          <Input name="number" icon={FiHome} placeholder="Digite o número da casa" maxLength={4}/>
+          <Input name="district" icon={FiMap} placeholder="Digite o nome do Bairro"/>
+          <Input name="city" icon={GiModernCity} placeholder="Digite o nome da cidade"/>
+
+          <Button type="submit">Cadastrar</Button>
+
+        </Form>
+      </Container>
+    </>
   )
-}
+};
 
 export default Dashboard;

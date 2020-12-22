@@ -1,10 +1,16 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
-import {api} from '../services/apis';
+import api from '../services/api';
 
 
 interface AuthState {
   token: string;
-  user: object;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    created_at: string;
+    updated_at: string;
+  };
 }
 
 interface SignInCredentials {
@@ -13,7 +19,13 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: object;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    created_at: string;
+    updated_at: string;
+  };
   signIn(credentials: SignInCredentials): Promise<void>;
   signOut(): void;
 }
@@ -23,8 +35,8 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<AuthState>(() => {
 
-    const token = localStorage.getItem('@GoBarber:token');
-    const user = localStorage.getItem('@GoBarber:user');
+    const token = localStorage.getItem('@ManagerUsers:token');
+    const user = localStorage.getItem('@ManagerUsers:user');
 
     if (token && user) {
       return { token, user:JSON.parse(user) };
@@ -41,16 +53,16 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     const { token, user } = response.data;
 
-    localStorage.setItem('@GoBarber:token', token);
-    localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+    localStorage.setItem('@ManagerUsers:token', token);
+    localStorage.setItem('@ManagerUsers:user', JSON.stringify(user));
 
     setData({ token, user });
 
   }, []);
 
   const signOut = useCallback(() => {
-    localStorage.removeItem('@GoBarber:token');
-    localStorage.removeItem('@GoBarber:user');
+    localStorage.removeItem('@ManagerUsers:token');
+    localStorage.removeItem('@ManagerUsers:user');
 
     setData({} as AuthState);
 
