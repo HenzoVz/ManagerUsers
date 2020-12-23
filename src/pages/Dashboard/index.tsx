@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -26,13 +26,11 @@ interface DashboardFormData {
   name: string;
   email: string;
   cpf: string;
-  address: {
-    cep: string;
-    street: string;
-    number: string;
-    district: string;
-    city: string;
-  };
+  cep: string;
+  street: string;
+  number: string;
+  district: string;
+  city: string;
 }
 
 const Dashboard: React.FC = () => {
@@ -40,6 +38,9 @@ const Dashboard: React.FC = () => {
 
   const { user } = useAuth();
   const { addToast } = useToasts();
+  const params = useParams<Params>();
+
+  console.log(params)
 
   const handleSubmit = useCallback(async (data: DashboardFormData) => {
 
@@ -62,17 +63,33 @@ const Dashboard: React.FC = () => {
         abortEarly: false
       });
 
-      await api.post('/registries', {
-        registry_id: user.id,
-        ...data
-      }).finally(() => {
-        formRef?.current?.setData({});
-      });
+      if (params.id) {
 
-      addToast(
-        'Registro cadastrado com sucesso!', {
-        appearance: 'success', autoDismiss: true
-      })
+        await api.put(`registries/${params.id}`, {
+          registry_id: user.id,
+          ...data
+        }).finally(() => {
+          formRef?.current?.setData({});
+        });
+
+        addToast(
+          'Registro atualizado com sucesso!', {
+          appearance: 'success', autoDismiss: true
+        });
+
+      } else {
+        await api.post('/registries', {
+          registry_id: user.id,
+          ...data
+        }).finally(() => {
+          formRef?.current?.setData({});
+        });
+
+        addToast(
+          'Registro cadastrado com sucesso!', {
+          appearance: 'success', autoDismiss: true
+        });
+      }
 
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
@@ -85,7 +102,7 @@ const Dashboard: React.FC = () => {
       }
 
     }
-  }, [addToast, user]);
+  }, [addToast, user, params.id]);
 
   const handleOnChangeCep = useCallback(() => {
     const value = formRef.current?.getFieldValue("cep");
@@ -111,6 +128,24 @@ const Dashboard: React.FC = () => {
 
   }, [] );
 
+  useEffect(() => {
+    if(params.id) {
+      api.get(`registries/${params.id}`).then(response => {
+        const { ...rest }: DashboardFormData = response.data[0];
+
+        formRef.current?.setFieldValue('name', rest.name);
+        formRef.current?.setFieldValue('email', rest.email);
+        formRef.current?.setFieldValue('cpf', rest.cpf);
+        formRef.current?.setFieldValue('cep', rest.cep);
+        formRef.current?.setFieldValue('street', rest.street);
+        formRef.current?.setFieldValue('number', rest.number);
+        formRef.current?.setFieldValue('district', rest.district);
+        formRef.current?.setFieldValue('city', rest.city);
+
+      });
+    }
+  }, [params.id]);
+
   return (
     <>
       <Header/>
@@ -126,7 +161,11 @@ const Dashboard: React.FC = () => {
           <Input name="district" icon={FiMap} placeholder="Digite o nome do Bairro"/>
           <Input name="city" icon={GiModernCity} placeholder="Digite o nome da cidade"/>
 
-          <Button type="submit">Cadastrar</Button>
+          {params.id ?
+            <Button type="submit">Atualizar</Button>
+            :
+            <Button type="submit">Cadastrar</Button>
+          }
 
         </Form>
       </Container>

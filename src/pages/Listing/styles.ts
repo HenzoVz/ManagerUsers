@@ -1,37 +1,52 @@
 import styled from 'styled-components';
+import { shade } from 'polished';
 
 export const Container = styled.div`
   margin: 0 auto;
   display: flex;
-  width: 50%;
+  width: 100%;
   justify-content: center;
   margin-top: 10px;
   padding: 15px;
 
   input {
+    flex: 1;
+    max-width: 500px;
     font-weight: 400;
     line-height: 1.5;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
+    text-align: center;
+
+    background-color: #a2d5f2;
+    border: 2px solid #fafafa;
     border-radius: 0.25rem;
     padding: 2px;
     margin: 3px;
     height: calc(1.5em + 0.75rem + 2px);
+
+    &::placeholder {
+      color: #000000;
+    }
   }
 
   button {
-        padding: 2px;
+    padding: 2px;
     margin: 3px;
     margin-left: 15px;
-    width: 150px;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ced4da;
+
+    background: #07689f;
+    border: 1px solid #fafafa;
     border-radius: 0.25rem;
-    font-weight: bold;
-    color: #495057;
+    color: #fafafa;
+    font-weight: 500;
+
+    width: 150px;
     height: calc(1.5em + 0.75rem + 2px);
+
+    &:hover {
+    background: ${shade(0.2, '#07689f')}
+    }
   }
 
 `;
@@ -43,7 +58,7 @@ export const Table  = styled.table`
   width: 50%;
 
   td, th {
-    border: 1px solid #dddddd;
+    border: 1px solid #07689f;
     text-align: center;
     padding: 8px;
   }
@@ -54,21 +69,22 @@ export const Table  = styled.table`
     height: 30px;
     border: 1px solid #fff;
     margin: 0 10px;
+    background-color: #fff;
   }
 
   .button-edit {
-    background: #fff;
+    transition: color 0.3s;
 
     &:hover {
-      background: #ff9800;
+      color: #ff9800;
     }
   }
 
   .button-delete {
-    background: #fff;
+    transition: color 0.3s;
 
     &:hover {
-      background: #f44336;
+      color: #f44336;
     }
   }
 

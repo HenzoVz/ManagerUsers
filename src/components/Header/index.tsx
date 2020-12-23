@@ -23,7 +23,7 @@ const Header: React.FC = () => {
           <Link className="link" to="/dashboard">
             Cadastrar
           </Link>
-          <Link className="link" to="/listagem">
+          <Link className="link" to="/listing">
             Listagem
           </Link>
           <Link className="link" to="/" onClick={handleSignOut}>

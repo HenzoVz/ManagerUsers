@@ -2,14 +2,14 @@ import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 
 
-const appearLeft = keyframes`
+const appearTop = keyframes`
   from {
     opacity: 0;
-    transform: translateX(-50px);
+    transform: translateY(-50px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 `;
 
@@ -19,7 +19,7 @@ export const Container = styled.header`
   justify-content: space-between;
   align-items: center;
   background-color: #07689f;
-  animation: ${appearLeft} 2s;
+  animation: ${appearTop} 2s;
 
   width: 100%;
   max-width: 100%;
@@ -46,10 +46,9 @@ export const Content = styled.nav`
     color: #fafafa;
     margin-right: 16px;
     padding: 20px;
-    transition: font-size, color 0.3s;
+    transition: color 0.3s;
 
     &:hover {
-      font-size: 16px;
       color: ${shade(0.3, '#a2d5f2')}
     }
 
@@ -58,6 +57,7 @@ export const Content = styled.nav`
       flex-direction: column;
       margin: 0;
       padding: 5px;
+      font-size: 18px;
     }
   }
 `;
