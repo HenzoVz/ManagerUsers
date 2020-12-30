@@ -73,7 +73,7 @@ const SingUp: React.FC = () => {
   return (
     <Container>
       <AnimationContainer>
-        <img src={logoImg} alt="Manager Users" style={{ backgroundSize: 'cover', width: '200px', height: '200px', paddingTop: '50px'}}/>
+      <img src={logoImg} alt="Managers Users"/>
         <Content>
           <Box1>
           <h1>Fazer Cadastro</h1>
